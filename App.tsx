@@ -1,11 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
+import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_700Bold
+  })
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      {fontsLoaded ? <Text style={{ fontFamily: 'Roboto_700Bold', fontSize: 20 }}>Home</Text> : <View />}
     </View>
   );
 }
