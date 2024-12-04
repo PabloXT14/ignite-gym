@@ -1,10 +1,16 @@
-import { StyleSheet, Text, View, StatusBar } from 'react-native'
+import { StyleSheet, View, StatusBar } from 'react-native'
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider'
 
 import {
   useFonts,
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
+
+import '@/global.css'
+
+import { Text } from './components/ui/text'
+import { Button, ButtonSpinner, ButtonText } from './components/ui/button'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -13,14 +19,29 @@ export default function App() {
   })
 
   return (
-    <View style={styles.container}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      {fontsLoaded ? <Text style={styles.text}>Home</Text> : <View />}
-    </View>
+    <GluestackUIProvider mode="light">
+      <View style={styles.container}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        {fontsLoaded ? (
+          <View className="flex items-center gap-2">
+            <Text className="text-white" size="lg">
+              Home
+            </Text>
+
+            <Button size="lg" variant="solid" action="primary">
+              <ButtonText>Button</ButtonText>
+              <ButtonSpinner className="text-white" />
+            </Button>
+          </View>
+        ) : (
+          <View />
+        )}
+      </View>
+    </GluestackUIProvider>
   )
 }
 
@@ -30,10 +51,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#202024',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  text: {
-    color: '#fafafa',
-    fontSize: 20,
-    fontFamily: 'Roboto_400Regular',
   },
 })
