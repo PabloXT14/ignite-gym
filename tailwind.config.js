@@ -1,13 +1,17 @@
-const gluestackPlugin = require('@gluestack-ui/nativewind-utils/tailwind-plugin');
+import gluestackPlugin from '@gluestack-ui/nativewind-utils/tailwind-plugin'
+
+import { colors } from './src/styles/colors'
+import { fontFamily } from './src/styles/font-family'
+import { fontSize } from './src/styles/font-size'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "media",
+  darkMode: 'media',
   content: [
-    "App.{tsx,jsx,ts,js}",
-    "index.{tsx,jsx,ts,js}",
-    "src/**/*.{tsx,jsx,ts,js}",
-    "components/**/*.{tsx,jsx,ts,js}",
+    'App.{tsx,jsx,ts,js}',
+    'index.{tsx,jsx,ts,js}',
+    'src/**/*.{tsx,jsx,ts,js}',
+    'components/**/*.{tsx,jsx,ts,js}',
   ],
   presets: [require('nativewind/preset')],
   theme: {
@@ -167,18 +171,19 @@ module.exports = {
           info: 'rgb(var(--color-indicator-info)/<alpha-value>)',
           error: 'rgb(var(--color-indicator-error)/<alpha-value>)',
         },
+        ...colors,
       },
       fontFamily: {
-        heading: undefined,
-        body: undefined,
         mono: undefined,
         roboto: ['Roboto', 'sans-serif'],
+        ...fontFamily,
       },
       fontWeight: {
         extrablack: '950',
       },
       fontSize: {
         '2xs': '10px',
+        ...fontSize,
       },
       boxShadow: {
         'hard-1': '-2px 2px 8px 0px rgba(38, 38, 38, 0.20)',
@@ -194,4 +199,4 @@ module.exports = {
     },
   },
   plugins: [gluestackPlugin],
-};
+}

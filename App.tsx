@@ -32,9 +32,9 @@ export default function App() {
               Home
             </Text>
 
-            <Button size="lg" variant="solid" action="primary">
-              <ButtonText>Button</ButtonText>
-              <ButtonSpinner className="text-white" />
+            <Button size="lg" variant="solid" action="primary" className="">
+              <ButtonText className="">Button</ButtonText>
+              <ButtonSpinner className="text-green-500" />
             </Button>
           </View>
         ) : (
