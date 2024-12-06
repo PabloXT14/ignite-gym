@@ -14,6 +14,7 @@
     "@expo-google-fonts/roboto": "^0.2.3",
     "@gluestack-ui/button": "^1.0.8",
     "@gluestack-ui/icon": "^0.1.25",
+    "@gluestack-ui/image": "^0.1.11",
     "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.16",
     "@gluestack-ui/spinner": "^0.1.15",

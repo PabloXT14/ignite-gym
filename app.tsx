@@ -9,9 +9,8 @@ import {
 
 import '@/global.css'
 
-import { Text } from './components/ui/text'
 import { Loading } from './src/components/loading'
-import { Center } from './components/ui/center'
+import { SignIn } from './src/screens/sign-in'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -26,15 +25,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {fontsLoaded ? (
-        <Center className="flex-1 bg-gray-700">
-          <Text className="text-white" size="lg">
-            Home
-          </Text>
-        </Center>
-      ) : (
-        <Loading />
-      )}
+      {fontsLoaded ? <SignIn /> : <Loading />}
     </GluestackUIProvider>
   )
 }
