@@ -1,6 +1,9 @@
 import { VStack } from '@/components/ui/vstack'
 import { Image } from '@/components/ui/image'
+import { Center } from '@/components/ui/center'
+import { Text } from '@/components/ui/text'
 
+import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
 
 export function SignIn() {
@@ -12,6 +15,14 @@ export function SignIn() {
         alt="Pessoas treinando"
         className="absolute w-full h-[624px]"
       />
+
+      <Center className="my-24">
+        <Logo />
+
+        <Text className="text-gray-100 text-sm">
+          Treine sua mente e seu corpo
+        </Text>
+      </Center>
     </VStack>
   )
 }
