@@ -2,6 +2,9 @@ import { VStack } from '@/components/ui/vstack'
 import { Image } from '@/components/ui/image'
 import { Center } from '@/components/ui/center'
 import { Text } from '@/components/ui/text'
+import { Heading } from '@/components/ui/heading'
+
+import { Input } from '../components/input'
 
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
@@ -16,13 +19,22 @@ export function SignIn() {
         className="absolute w-full h-[624px]"
       />
 
-      <Center className="my-24">
-        <Logo />
+      <VStack className="flex-1 px-10 pb-16">
+        <Center className="my-24">
+          <Logo />
 
-        <Text className="text-gray-100 text-sm">
-          Treine sua mente e seu corpo
-        </Text>
-      </Center>
+          <Text className="text-gray-100 text-sm">
+            Treine sua mente e seu corpo
+          </Text>
+        </Center>
+
+        <Center className="gap-2">
+          <Heading className="text-gray-100">Acesse sua conta</Heading>
+
+          <Input placeholder="E-mail" />
+          <Input placeholder="Senha" secureTextEntry />
+        </Center>
+      </VStack>
     </VStack>
   )
 }
