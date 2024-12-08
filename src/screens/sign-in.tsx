@@ -31,7 +31,11 @@ export function SignIn() {
         <Center className="gap-2">
           <Heading className="text-gray-100">Acesse sua conta</Heading>
 
-          <Input placeholder="E-mail" />
+          <Input
+            placeholder="E-mail"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
           <Input placeholder="Senha" secureTextEntry />
         </Center>
       </VStack>
