@@ -5,6 +5,7 @@ import { Text } from '@/components/ui/text'
 import { Heading } from '@/components/ui/heading'
 
 import { Input } from '../components/input'
+import { Button } from '../components/button'
 
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
@@ -36,7 +37,10 @@ export function SignIn() {
             keyboardType="email-address"
             autoCapitalize="none"
           />
+
           <Input placeholder="Senha" secureTextEntry />
+
+          <Button title="Acessar" />
         </Center>
       </VStack>
     </VStack>
