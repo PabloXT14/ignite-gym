@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { tv, type VariantProps } from 'tailwind-variants'
 
 import {
   ButtonSpinner,
@@ -7,25 +8,48 @@ import {
   Button as GluestackButton,
 } from '@/components/ui/button'
 
-type ButtonProps = ComponentProps<typeof GluestackButton> & {
-  title: string
-  isLoading?: boolean
-}
+const buttonStyle = tv({
+  base: 'w-full h-14 rounded-md transition-all',
+  variants: {
+    variant: {
+      solid: 'bg-green-700 data-[active=true]:bg-green-500',
+      outline:
+        'bg-transparent border border-green-500 data-[active=true]:bg-green-700',
+    },
+  },
+  defaultVariants: {
+    variant: 'solid',
+  },
+})
 
-export function Button({ title, isLoading, className, ...props }: ButtonProps) {
+type ButtonProps = VariantProps<typeof buttonStyle> &
+  ComponentProps<typeof GluestackButton> & {
+    title: string
+    isLoading?: boolean
+  }
+
+export function Button({
+  title,
+  isLoading,
+  className,
+  variant,
+  ...props
+}: ButtonProps) {
   return (
     <GluestackButton
-      className={twMerge(
-        'w-full h-14 bg-green-700 rounded-md transition-all data-[active=true]:bg-green-500',
-        className
-      )}
+      className={buttonStyle({ variant, class: className })}
       disabled={isLoading}
       {...props}
     >
       {isLoading ? (
         <ButtonSpinner className="text-white" />
       ) : (
-        <ButtonText className="text-white font-bold text-sm">
+        <ButtonText
+          className={twMerge(
+            'text-white font-regular',
+            variant === 'outline' && 'text-green-500'
+          )}
+        >
           {title}
         </ButtonText>
       )}
