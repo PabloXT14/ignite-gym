@@ -1,10 +1,11 @@
 import { Center } from '@/components/ui/center'
-import { Text } from '@/components/ui/text'
+
+import { HomeHeader } from '../components/home-header'
 
 export function Home() {
   return (
     <Center className="flex-1">
-      <Text className="text-white">Home</Text>
+      <HomeHeader />
     </Center>
   )
 }
