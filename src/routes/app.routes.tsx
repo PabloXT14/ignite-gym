@@ -1,3 +1,4 @@
+import { Platform } from 'react-native'
 import {
   createBottomTabNavigator,
   type BottomTabNavigationProp,
@@ -34,6 +35,13 @@ export function AppRoutes() {
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.green[500],
         tabBarInactiveTintColor: colors.gray[200],
+        tabBarStyle: {
+          backgroundColor: colors.gray[600],
+          borderTopWidth: 0,
+          height: Platform.OS === 'android' ? 'auto' : 96,
+          paddingTop: 24,
+          paddingBottom: 56,
+        },
       }}
     >
       <Screen
@@ -66,7 +74,11 @@ export function AppRoutes() {
         }}
       />
 
-      <Screen name="exercise" component={Exercise} />
+      <Screen
+        name="exercise"
+        component={Exercise}
+        options={{ tabBarItemStyle: { display: 'none' } }}
+      />
     </Navigator>
   )
 }
