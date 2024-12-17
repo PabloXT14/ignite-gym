@@ -5,7 +5,7 @@ import { VStack } from '@/components/ui/vstack'
 
 export function HomeHeader() {
   return (
-    <HStack>
+    <HStack className="bg-gray-600 pt-16 pb-5 px-8 items-center">
       <VStack>
         <Text className="text-gray-100 text-base font-regular">Olá</Text>
 

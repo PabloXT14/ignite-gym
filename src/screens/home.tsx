@@ -1,11 +1,11 @@
-import { Center } from '@/components/ui/center'
+import { VStack } from '@/components/ui/vstack'
 
 import { HomeHeader } from '../components/home-header'
 
 export function Home() {
   return (
-    <Center className="flex-1">
+    <VStack className="flex-1">
       <HomeHeader />
-    </Center>
+    </VStack>
   )
 }
