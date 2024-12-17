@@ -11,6 +11,7 @@ import { Exercise } from '../screens/exercise'
 import HomeSvg from '@src/assets/home.svg'
 import HistorySvg from '@src/assets/history.svg'
 import ProfileSvg from '@src/assets/profile.svg'
+import { colors } from '../styles/colors'
 
 type AppRoutesProps = {
   home: undefined
@@ -27,7 +28,14 @@ export function AppRoutes() {
   const iconSize = 24
 
   return (
-    <Navigator screenOptions={{ headerShown: false, tabBarShowLabel: false }}>
+    <Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: colors.green[500],
+        tabBarInactiveTintColor: colors.gray[200],
+      }}
+    >
       <Screen
         name="home"
         component={Home}
