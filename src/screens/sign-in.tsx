@@ -18,7 +18,7 @@ export function SignIn() {
       contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
     >
-      <VStack className="flex-1 bg-gray-700">
+      <VStack className="flex-1">
         <Image
           source={backgroundImg}
           defaultSource={backgroundImg}
