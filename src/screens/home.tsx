@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { FlatList } from 'react-native'
 
 import { VStack } from '@/components/ui/vstack'
+import { HStack } from '@/components/ui/hstack'
+import { Heading } from '@/components/ui/heading'
+import { Text } from '@/components/ui/text'
 
 import { HomeHeader } from '../components/home-header'
 import { Group } from '../components/group'
@@ -26,9 +29,19 @@ export function Home() {
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 32, gap: 12 }}
+        contentContainerClassName="px-8 gap-3"
         style={{ marginVertical: 40, maxHeight: 44, minHeight: 44 }}
       />
+
+      <VStack className="px-8">
+        <HStack className="justify-between items-center mb-5">
+          <Heading className="text-gray-200 text-base font-bold">
+            Exercícios
+          </Heading>
+
+          <Text className="text-gray-200 text-sm font-regular">4</Text>
+        </HStack>
+      </VStack>
     </VStack>
   )
 }
