@@ -6,6 +6,7 @@ import { Text } from '@/components/ui/text'
 
 import { ScreenHeader } from '../components/screen-header'
 import { UserPhoto } from '../components/user-photo'
+import { Input } from '../components/input'
 
 export function Profile() {
   return (
@@ -25,6 +26,15 @@ export function Profile() {
               Alterar foto
             </Text>
           </TouchableOpacity>
+
+          <Center className="w-full gap-4">
+            <Input placeholder="Nome" className="bg-gray-600" />
+            <Input
+              value="johndoe@email.com"
+              className="bg-gray-600"
+              isReadOnly
+            />
+          </Center>
         </Center>
       </ScrollView>
     </VStack>
