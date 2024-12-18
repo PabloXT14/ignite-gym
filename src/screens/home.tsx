@@ -8,6 +8,7 @@ import { Text } from '@/components/ui/text'
 
 import { HomeHeader } from '../components/home-header'
 import { Group } from '../components/group'
+import { ExerciseCard } from '../components/exercise-card'
 
 export function Home() {
   const [groups, setGroups] = useState(['costas', 'bíceps', 'tríceps', 'ombro'])
@@ -41,6 +42,8 @@ export function Home() {
 
           <Text className="text-gray-200 text-sm font-regular">4</Text>
         </HStack>
+
+        <ExerciseCard />
       </VStack>
     </VStack>
   )
