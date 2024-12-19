@@ -3,10 +3,12 @@ import { ScrollView, TouchableOpacity } from 'react-native'
 import { VStack } from '@/components/ui/vstack'
 import { Center } from '@/components/ui/center'
 import { Text } from '@/components/ui/text'
+import { Heading } from '@/components/ui/heading'
 
 import { ScreenHeader } from '../components/screen-header'
 import { UserPhoto } from '../components/user-photo'
 import { Input } from '../components/input'
+import { Button } from '../components/button'
 
 export function Profile() {
   return (
@@ -34,6 +36,32 @@ export function Profile() {
               className="bg-gray-600"
               isReadOnly
             />
+          </Center>
+
+          <Heading className="self-start text-gray-200 text-base font-bold mt-12 mb-2">
+            Alterar senha
+          </Heading>
+
+          <Center className="w-full gap-4">
+            <Input
+              placeholder="Senha antiga"
+              className="bg-gray-600"
+              secureTextEntry
+            />
+
+            <Input
+              placeholder="Nova senha"
+              className="bg-gray-600"
+              secureTextEntry
+            />
+
+            <Input
+              placeholder="Confirmar a nova senha"
+              className="bg-gray-600"
+              secureTextEntry
+            />
+
+            <Button title="Atualizar" className="mt-8" />
           </Center>
         </Center>
       </ScrollView>
