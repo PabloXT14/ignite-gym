@@ -6,8 +6,11 @@ import { VStack } from '@/components/ui/vstack'
 export function HistoryCard() {
   return (
     <HStack className="w-full px-5 py-4 mb-3 bg-gray-600 rounded-lg items-center justify-between">
-      <VStack className="mr-5">
-        <Heading className="text-white text-base font-bold capitalize">
+      <VStack className="mr-5 flex-1">
+        <Heading
+          className="text-white text-base font-bold capitalize"
+          numberOfLines={1}
+        >
           Costas
         </Heading>
 
