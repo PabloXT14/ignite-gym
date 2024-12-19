@@ -1,4 +1,4 @@
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, ScrollView } from 'react-native'
 import { ArrowLeft } from 'lucide-react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -8,10 +8,14 @@ import { HStack } from '@/components/ui/hstack'
 import { Heading } from '@/components/ui/heading'
 import { Text } from '@/components/ui/text'
 import { Image } from '@/components/ui/image'
+import { Box } from '@/components/ui/box'
 
 import type { AppNavigatorRoutesProps } from '../routes/app.routes'
+import { Button } from '../components/button'
 
 import BodySvg from '@src/assets/body.svg'
+import SeriesSvg from '@src/assets/series.svg'
+import RepetitionsSvg from '@src/assets/repetitions.svg'
 
 export function Exercise() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
@@ -40,16 +44,37 @@ export function Exercise() {
         </HStack>
       </VStack>
 
-      <VStack className="p-8">
-        <Image
-          source={{
-            uri: 'https://static.wixstatic.com/media/2edbed_60c206e178ad4eb3801f4f47fc6523df~mv2.webp/v1/fill/w_350,h_375,al_c/2edbed_60c206e178ad4eb3801f4f47fc6523df~mv2.webp',
-          }}
-          alt="Exercício"
-          className="mb-3 w-full h-[364px] rounded-lg"
-          resizeMode="cover"
-        />
-      </VStack>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName="pb-8"
+      >
+        <VStack className="p-8">
+          <Image
+            source={{
+              uri: 'https://static.wixstatic.com/media/2edbed_60c206e178ad4eb3801f4f47fc6523df~mv2.webp/v1/fill/w_350,h_375,al_c/2edbed_60c206e178ad4eb3801f4f47fc6523df~mv2.webp',
+            }}
+            alt="Exercício"
+            className="mb-4 w-full h-[364px] rounded-lg"
+            resizeMode="cover"
+          />
+
+          <Box className="bg-gray-600 rounded-lg pb-4 px-4">
+            <HStack className="items-center justify-around mb-6 mt-5">
+              <HStack>
+                <SeriesSvg />
+                <Text className="text-gray-200 ml-2">3 séries</Text>
+              </HStack>
+
+              <HStack>
+                <RepetitionsSvg />
+                <Text className="text-gray-200 ml-2">12 repetições</Text>
+              </HStack>
+            </HStack>
+
+            <Button title="Marcar como realizado" />
+          </Box>
+        </VStack>
+      </ScrollView>
     </VStack>
   )
 }
