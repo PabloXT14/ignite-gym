@@ -8,6 +8,7 @@ import { VStack } from '@/components/ui/vstack'
 import { Center } from '@/components/ui/center'
 import { Text } from '@/components/ui/text'
 import { Heading } from '@/components/ui/heading'
+import { useToast } from '@/components/ui/toast'
 
 import { ScreenHeader } from '../components/screen-header'
 import { UserPhoto } from '../components/user-photo'
@@ -15,10 +16,12 @@ import { Input } from '../components/input'
 import { Button } from '../components/button'
 import { ToastMessage } from '../components/toast-message'
 
-const MAX_IMAGE_SIZE_MB = 5
+const MAX_IMAGE_SIZE_MB = 0.4
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/pabloxt14.png')
+
+  const toast = useToast()
 
   async function handleUserPhotoSelect() {
     try {
@@ -42,10 +45,18 @@ export function Profile() {
           photoInfo.size &&
           photoInfo.size / 1024 / 1024 > MAX_IMAGE_SIZE_MB
         ) {
-          return Alert.alert(
-            'Essa imagem é muito grande',
-            `Escolha uma de até ${MAX_IMAGE_SIZE_MB}MB.`
-          )
+          return toast.show({
+            placement: 'top',
+            render: ({ id }) => (
+              <ToastMessage
+                id={id}
+                action="error"
+                title="Imagem muito grande"
+                description={`Escolha uma de até ${MAX_IMAGE_SIZE_MB}MB.`}
+                onClose={() => toast.close(id)}
+              />
+            ),
+          })
         }
 
         setUserPhoto(photoUri)
@@ -62,14 +73,6 @@ export function Profile() {
   return (
     <VStack className="flex-1">
       <ScreenHeader title="Perfil" />
-
-      <ToastMessage
-        id="1"
-        title="Foto alterada"
-        description="Sua foto foi alterada com sucesso."
-        action="success"
-        onClose={() => {}}
-      />
 
       <ScrollView contentContainerClassName="pb-9">
         <Center className="mt-6 px-10">

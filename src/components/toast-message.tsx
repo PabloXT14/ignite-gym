@@ -26,7 +26,7 @@ export function ToastMessage({
       nativeID={`toast-${id}`}
       action={action}
       className={twMerge(
-        'mt-10',
+        'mt-10 mx-5',
         action === 'success' ? 'bg-green-500' : 'bg-red-500'
       )}
     >
