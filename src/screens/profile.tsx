@@ -1,4 +1,5 @@
 import { ScrollView, TouchableOpacity } from 'react-native'
+import * as ImagePicker from 'expo-image-picker'
 
 import { VStack } from '@/components/ui/vstack'
 import { Center } from '@/components/ui/center'
@@ -11,6 +12,10 @@ import { Input } from '../components/input'
 import { Button } from '../components/button'
 
 export function Profile() {
+  async function handleUserPhotoSelect() {
+    await ImagePicker.launchImageLibraryAsync()
+  }
+
   return (
     <VStack className="flex-1">
       <ScreenHeader title="Perfil" />
@@ -23,7 +28,7 @@ export function Profile() {
             size="xl"
           />
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleUserPhotoSelect}>
             <Text className="text-green-500 text-base font-bold mt-2 mb-8">
               Alterar foto
             </Text>
