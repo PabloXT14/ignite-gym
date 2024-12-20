@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { ScrollView, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 
@@ -12,6 +14,8 @@ import { Input } from '../components/input'
 import { Button } from '../components/button'
 
 export function Profile() {
+  const [userPhoto, setUserPhoto] = useState('https://github.com/pabloxt14.png')
+
   async function handleUserPhotoSelect() {
     const photoSelected = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
@@ -22,7 +26,7 @@ export function Profile() {
 
     if (photoSelected.canceled) return
 
-    console.log(photoSelected.assets[0])
+    setUserPhoto(photoSelected.assets[0].uri)
   }
 
   return (
@@ -32,7 +36,7 @@ export function Profile() {
       <ScrollView contentContainerClassName="pb-9">
         <Center className="mt-6 px-10">
           <UserPhoto
-            source={'https://github.com/pabloxt14.png'}
+            source={{ uri: userPhoto }}
             alt="Imagem do Usuário"
             size="xl"
           />
