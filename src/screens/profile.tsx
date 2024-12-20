@@ -13,6 +13,7 @@ import { ScreenHeader } from '../components/screen-header'
 import { UserPhoto } from '../components/user-photo'
 import { Input } from '../components/input'
 import { Button } from '../components/button'
+import { ToastMessage } from '../components/toast-message'
 
 const MAX_IMAGE_SIZE_MB = 5
 
@@ -47,8 +48,6 @@ export function Profile() {
           )
         }
 
-        console.log('PHOTO SIZE: ', photoInfo.size)
-
         setUserPhoto(photoUri)
       }
     } catch (error) {
@@ -63,6 +62,14 @@ export function Profile() {
   return (
     <VStack className="flex-1">
       <ScreenHeader title="Perfil" />
+
+      <ToastMessage
+        id="1"
+        title="Foto alterada"
+        description="Sua foto foi alterada com sucesso."
+        action="success"
+        onClose={() => {}}
+      />
 
       <ScrollView contentContainerClassName="pb-9">
         <Center className="mt-6 px-10">
