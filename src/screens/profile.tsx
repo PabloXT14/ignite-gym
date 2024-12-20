@@ -16,7 +16,7 @@ import { Input } from '../components/input'
 import { Button } from '../components/button'
 import { ToastMessage } from '../components/toast-message'
 
-const MAX_IMAGE_SIZE_MB = 0.4
+const MAX_IMAGE_SIZE_MB = 5
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/pabloxt14.png')
