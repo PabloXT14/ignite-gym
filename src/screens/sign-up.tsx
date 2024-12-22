@@ -84,19 +84,32 @@ export function SignUp() {
               )}
             </View>
 
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder="E-mail"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  onChangeText={onChange}
-                  value={value}
-                />
+            <View className="w-full">
+              <Controller
+                control={control}
+                name="email"
+                rules={{
+                  required: 'Informe o e-mail',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'E-mail inválido',
+                  },
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    placeholder="E-mail"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
+
+              {errors.email && (
+                <Text className="text-red-600">{errors.email.message}</Text>
               )}
-            />
+            </View>
 
             <Controller
               control={control}
