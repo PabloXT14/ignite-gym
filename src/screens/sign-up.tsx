@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 
@@ -23,7 +23,11 @@ type FormDataProps = {
 }
 
 export function SignUp() {
-  const { control, handleSubmit } = useForm<FormDataProps>()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>()
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
@@ -60,20 +64,25 @@ export function SignUp() {
           <Center className="gap-3 flex-1">
             <Heading className="text-gray-100">Crie sua conta</Heading>
 
-            <Controller
-              control={control}
-              name="name"
-              rules={{
-                required: 'Informe o nome',
-              }}
-              render={({ field: { onChange, value } }) => (
-                <Input
-                  placeholder="Nome"
-                  onChangeText={onChange}
-                  value={value}
-                />
+            <View className="w-full">
+              <Controller
+                control={control}
+                name="name"
+                rules={{
+                  required: 'Informe o nome',
+                }}
+                render={({ field: { onChange, value } }) => (
+                  <Input
+                    placeholder="Nome"
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
+              {errors.name && (
+                <Text className="text-red-600">{errors.name.message}</Text>
               )}
-            />
+            </View>
 
             <Controller
               control={control}
