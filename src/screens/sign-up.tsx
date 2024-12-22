@@ -15,8 +15,15 @@ import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
 
+type FormDataProps = {
+  name: string
+  email: string
+  password: string
+  password_confirm: string
+}
+
 export function SignUp() {
-  const { control, handleSubmit } = useForm()
+  const { control, handleSubmit } = useForm<FormDataProps>()
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
@@ -24,7 +31,7 @@ export function SignUp() {
     navigation.goBack()
   }
 
-  function handleSignUp(data: any) {
+  function handleSignUp(data: FormDataProps) {
     console.log(data)
   }
 
