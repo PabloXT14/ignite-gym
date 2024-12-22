@@ -23,14 +23,7 @@ type FormDataProps = {
 }
 
 export function SignUp() {
-  const { control, handleSubmit } = useForm<FormDataProps>({
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      password_confirm: '',
-    },
-  })
+  const { control, handleSubmit } = useForm<FormDataProps>()
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
@@ -70,6 +63,9 @@ export function SignUp() {
             <Controller
               control={control}
               name="name"
+              rules={{
+                required: 'Informe o nome',
+              }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Nome"
