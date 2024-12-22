@@ -23,7 +23,14 @@ type FormDataProps = {
 }
 
 export function SignUp() {
-  const { control, handleSubmit } = useForm<FormDataProps>()
+  const { control, handleSubmit } = useForm<FormDataProps>({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      password_confirm: '',
+    },
+  })
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
