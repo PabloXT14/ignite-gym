@@ -64,52 +64,43 @@ export function SignUp() {
           <Center className="gap-3 flex-1">
             <Heading className="text-gray-100">Crie sua conta</Heading>
 
-            <View className="w-full">
-              <Controller
-                control={control}
-                name="name"
-                rules={{
-                  required: 'Informe o nome',
-                }}
-                render={({ field: { onChange, value } }) => (
-                  <Input
-                    placeholder="Nome"
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-              />
-              {errors.name && (
-                <Text className="text-red-600">{errors.name.message}</Text>
+            <Controller
+              control={control}
+              name="name"
+              rules={{
+                required: 'Informe o nome',
+              }}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="Nome"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.name?.message}
+                />
               )}
-            </View>
+            />
 
-            <View className="w-full">
-              <Controller
-                control={control}
-                name="email"
-                rules={{
-                  required: 'Informe o e-mail',
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'E-mail inválido',
-                  },
-                }}
-                render={({ field: { onChange, value } }) => (
-                  <Input
-                    placeholder="E-mail"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-              />
-
-              {errors.email && (
-                <Text className="text-red-600">{errors.email.message}</Text>
+            <Controller
+              control={control}
+              name="email"
+              rules={{
+                required: 'Informe o e-mail',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: 'E-mail inválido',
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  placeholder="E-mail"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  onChangeText={onChange}
+                  value={value}
+                  errorMessage={errors.email?.message}
+                />
               )}
-            </View>
+            />
 
             <Controller
               control={control}
