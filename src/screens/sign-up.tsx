@@ -17,17 +17,30 @@ import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
 
-const FormSchema = z.object({
-  name: z
-    .string({ required_error: 'Informe o nome' })
-    .nonempty('Informe o nome'),
-  email: z
-    .string({ required_error: 'Informe o e-mail' })
-    .email('E-mail inválido'),
-  password: z
-    .string({ required_error: 'Informe a senha' })
-    .min(6, 'A senha deve ter no mínimo 6 dígitos'),
-})
+const FormSchema = z
+  .object({
+    name: z
+      .string({ required_error: 'Informe o nome' })
+      .nonempty('Informe o nome'),
+    email: z
+      .string({ required_error: 'Informe o e-mail' })
+      .email('E-mail inválido'),
+    password: z
+      .string({ required_error: 'Informe a senha' })
+      .min(6, 'A senha deve ter no mínimo 6 dígitos'),
+    confirmPassword: z
+      .string({ required_error: 'Confirme a senha' })
+      .min(6, 'A senha deve ter no mínimo 6 dígitos'),
+  })
+  .refine(
+    values => {
+      return values.password === values.confirmPassword
+    },
+    {
+      message: 'A confirmação da senha não confere',
+      path: ['confirmPassword'],
+    }
+  )
 
 type FormData = z.infer<typeof FormSchema>
 
@@ -119,7 +132,7 @@ export function SignUp() {
 
             <Controller
               control={control}
-              name="password_confirm"
+              name="confirmPassword"
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Confirmar senha"
@@ -128,6 +141,7 @@ export function SignUp() {
                   value={value}
                   onSubmitEditing={handleSubmit(handleSignUp)}
                   returnKeyType="send"
+                  errorMessage={errors.confirmPassword?.message}
                 />
               )}
             />
