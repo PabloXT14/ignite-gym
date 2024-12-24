@@ -1,6 +1,8 @@
 import { ScrollView, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { VStack } from '@/components/ui/vstack'
 import { Image } from '@/components/ui/image'
@@ -15,19 +17,25 @@ import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
 
-type FormDataProps = {
-  name: string
-  email: string
-  password: string
-  password_confirm: string
-}
+const FormSchema = z.object({
+  name: z
+    .string({ required_error: 'Informe o nome' })
+    .nonempty('Informe o nome'),
+  email: z
+    .string({ required_error: 'Informe o e-mail' })
+    .email('E-mail inválido'),
+})
+
+type FormData = z.infer<typeof FormSchema>
 
 export function SignUp() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataProps>()
+  } = useForm<FormData>({
+    resolver: zodResolver(FormSchema),
+  })
 
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
@@ -35,7 +43,7 @@ export function SignUp() {
     navigation.goBack()
   }
 
-  function handleSignUp(data: FormDataProps) {
+  function handleSignUp(data: FormData) {
     console.log(data)
   }
 
@@ -67,9 +75,6 @@ export function SignUp() {
             <Controller
               control={control}
               name="name"
-              rules={{
-                required: 'Informe o nome',
-              }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Nome"
@@ -83,13 +88,6 @@ export function SignUp() {
             <Controller
               control={control}
               name="email"
-              rules={{
-                required: 'Informe o e-mail',
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'E-mail inválido',
-                },
-              }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="E-mail"
