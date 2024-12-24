@@ -24,6 +24,9 @@ const FormSchema = z.object({
   email: z
     .string({ required_error: 'Informe o e-mail' })
     .email('E-mail inválido'),
+  password: z
+    .string({ required_error: 'Informe a senha' })
+    .min(6, 'A senha deve ter no mínimo 6 dígitos'),
 })
 
 type FormData = z.infer<typeof FormSchema>
@@ -109,6 +112,7 @@ export function SignUp() {
                   secureTextEntry
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.password?.message}
                 />
               )}
             />
