@@ -1,5 +1,8 @@
 import { ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { useForm, Controller } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { VStack } from '@/components/ui/vstack'
 import { Image } from '@/components/ui/image'
@@ -14,11 +17,34 @@ import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
 
+const FormSchema = z.object({
+  email: z
+    .string({ required_error: 'Informe o e-mail' })
+    .email('E-mail inválido'),
+  password: z
+    .string({ required_error: 'Informe a senha' })
+    .min(6, 'A senha deve ter no mínimo 6 dígitos'),
+})
+
+type FormData = z.infer<typeof FormSchema>
+
 export function SignIn() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(FormSchema),
+  })
+
   const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
   function handleNewAccount() {
     navigation.navigate('signUp')
+  }
+
+  function handleSignIn(data: FormData) {
+    console.log(data)
   }
 
   return (
@@ -46,15 +72,38 @@ export function SignIn() {
           <Center className="gap-3 flex-1">
             <Heading className="text-gray-100">Acesse sua conta</Heading>
 
-            <Input
-              placeholder="E-mail"
-              keyboardType="email-address"
-              autoCapitalize="none"
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  placeholder="E-mail"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={value}
+                  onChangeText={onChange}
+                  errorMessage={errors.email?.message}
+                />
+              )}
             />
 
-            <Input placeholder="Senha" secureTextEntry />
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  placeholder="Senha"
+                  secureTextEntry
+                  value={value}
+                  onChangeText={onChange}
+                  errorMessage={errors.password?.message}
+                  onSubmitEditing={handleSubmit(handleSignIn)}
+                  returnKeyType="send"
+                />
+              )}
+            />
 
-            <Button title="Acessar" />
+            <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
           </Center>
 
           <Center className="flex-1 justify-end mt-28">
