@@ -1,8 +1,9 @@
-import { ScrollView, View } from 'react-native'
+import { Alert, ScrollView, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 
 import { VStack } from '@/components/ui/vstack'
 import { Image } from '@/components/ui/image'
@@ -62,13 +63,21 @@ export function SignUp() {
   }
 
   async function handleSignUp({ name, email, password }: FormData) {
-    const response = await api.post('/users', {
-      name,
-      email,
-      password,
-    })
+    try {
+      const response = await api.post('/users', {
+        name,
+        email,
+        password,
+      })
 
-    console.log(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+
+      if (axios.isAxiosError(error)) {
+        Alert.alert(error.response?.data.message)
+      }
+    }
   }
 
   return (
