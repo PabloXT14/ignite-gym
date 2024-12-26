@@ -72,8 +72,6 @@ export function SignUp() {
 
       console.log(response.data)
     } catch (error) {
-      console.log(error)
-
       if (axios.isAxiosError(error)) {
         Alert.alert(error.response?.data.message)
       }
