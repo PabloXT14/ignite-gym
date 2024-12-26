@@ -14,8 +14,10 @@ import { Input } from '../components/input'
 import { Button } from '../components/button'
 import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 
+import { api } from '@src/services/api'
+
 import Logo from '@src/assets/logo.svg'
-import backgroundImg from '../assets/background.png'
+import backgroundImg from '@src/assets/background.png'
 
 const FormSchema = z
   .object({
@@ -60,18 +62,13 @@ export function SignUp() {
   }
 
   async function handleSignUp({ name, email, password }: FormData) {
-    const response = await fetch('http://192.168.2.123:3333/users', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, password }),
+    const response = await api.post('/users', {
+      name,
+      email,
+      password,
     })
 
-    const data = await response.json()
-
-    console.log(data)
+    console.log(response.data)
   }
 
   return (
