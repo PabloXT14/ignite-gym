@@ -1,4 +1,4 @@
-import { Alert, ScrollView, View } from 'react-native'
+import { Alert, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
@@ -10,15 +10,19 @@ import { Image } from '@/components/ui/image'
 import { Center } from '@/components/ui/center'
 import { Text } from '@/components/ui/text'
 import { Heading } from '@/components/ui/heading'
+import { useToast } from '@/components/ui/toast'
 
 import { Input } from '../components/input'
 import { Button } from '../components/button'
+import { ToastMessage } from '../components/toast-message'
 import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 
 import { api } from '@src/services/api'
+import { AppError } from '../utils/app-error'
 
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '@src/assets/background.png'
+import { colors } from '../styles/colors'
 
 const FormSchema = z
   .object({
@@ -48,6 +52,8 @@ const FormSchema = z
 type FormData = z.infer<typeof FormSchema>
 
 export function SignUp() {
+  const toast = useToast()
+
   const {
     control,
     handleSubmit,
@@ -72,9 +78,23 @@ export function SignUp() {
 
       console.log(response.data)
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        Alert.alert(error.response?.data.message)
-      }
+      const isAppError = error instanceof AppError
+
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível criar a conta. Tente novamente mais tarde.'
+
+      toast.show({
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            action="error"
+            title={title}
+            onClose={() => toast.close(id)}
+          />
+        ),
+        placement: 'top',
+      })
     }
   }
 
