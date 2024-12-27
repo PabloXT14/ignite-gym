@@ -13,6 +13,7 @@ import { Heading } from '@/components/ui/heading'
 import { Input } from '../components/input'
 import { Button } from '../components/button'
 import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
+import { useAuth } from '../hooks/use-auth'
 
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '../assets/background.png'
@@ -29,6 +30,8 @@ const FormSchema = z.object({
 type FormData = z.infer<typeof FormSchema>
 
 export function SignIn() {
+  const { signIn } = useAuth()
+
   const {
     control,
     handleSubmit,
@@ -43,8 +46,8 @@ export function SignIn() {
     navigation.navigate('signUp')
   }
 
-  function handleSignIn(data: FormData) {
-    console.log(data)
+  function handleSignIn({ email, password }: FormData) {
+    signIn(email, password)
   }
 
   return (
