@@ -7,8 +7,11 @@ import { VStack } from '@/components/ui/vstack'
 import { Icon } from '@/components/ui/icon'
 
 import { UserPhoto } from './user-photo'
+import { useAuth } from '../hooks/use-auth'
 
 export function HomeHeader() {
+  const { user } = useAuth()
+
   return (
     <HStack className="bg-gray-600 pt-16 pb-5 px-8 items-center gap-4">
       <UserPhoto
@@ -21,7 +24,7 @@ export function HomeHeader() {
         <Text className="text-gray-100 text-base font-regular">Olá</Text>
 
         <Heading className="text-gray-100 text-base font-bold">
-          John Doe
+          {user.name}
         </Heading>
       </VStack>
 
