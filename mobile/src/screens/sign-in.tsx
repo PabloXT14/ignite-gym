@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
@@ -33,9 +34,11 @@ const FormSchema = z.object({
 type FormData = z.infer<typeof FormSchema>
 
 export function SignIn() {
-  const { signIn } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
 
+  const { signIn } = useAuth()
   const toast = useToast()
+  const navigation = useNavigation<AuthNavigatorRoutesProps>()
 
   const {
     control,
@@ -45,14 +48,14 @@ export function SignIn() {
     resolver: zodResolver(FormSchema),
   })
 
-  const navigation = useNavigation<AuthNavigatorRoutesProps>()
-
   function handleNewAccount() {
     navigation.navigate('signUp')
   }
 
   async function handleSignIn({ email, password }: FormData) {
     try {
+      setIsLoading(true)
+
       await signIn(email, password)
     } catch (error) {
       console.log(error)
@@ -74,6 +77,8 @@ export function SignIn() {
           />
         ),
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -133,7 +138,11 @@ export function SignIn() {
               )}
             />
 
-            <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+            <Button
+              title="Acessar"
+              onPress={handleSubmit(handleSignIn)}
+              isLoading={isLoading}
+            />
           </Center>
 
           <Center className="flex-1 justify-end mt-28">
