@@ -1,9 +1,12 @@
 import { createContext, useState, type ReactNode } from 'react'
+
 import type { UserDTO } from '../dtos/user-dto'
+
+import { makeSignIn } from '../https/make-sign-in'
 
 export type AuthContextData = {
   user: UserDTO
-  signIn: (email: string, password: string) => void
+  signIn: (email: string, password: string) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -13,20 +16,18 @@ type AuthContextProviderProps = {
 }
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const [user, setUser] = useState<UserDTO>({
-    id: '1',
-    name: 'John Doe',
-    email: 'FyZ0F@example.com',
-    avatar: 'https://github.com/pabloxt14.png',
-  })
+  const [user, setUser] = useState<UserDTO>({} as UserDTO)
 
-  function signIn(email: string, password: string) {
-    setUser({
-      id: '',
-      name: '',
-      email,
-      avatar: '',
-    })
+  async function signIn(email: string, password: string) {
+    try {
+      const { user } = await makeSignIn({ email, password })
+
+      if (user) {
+        setUser(user)
+      }
+    } catch (error) {
+      throw error
+    }
   }
 
   return (
