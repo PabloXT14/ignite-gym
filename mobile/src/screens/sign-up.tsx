@@ -1,9 +1,8 @@
-import { Alert, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 
 import { VStack } from '@/components/ui/vstack'
 import { Image } from '@/components/ui/image'
@@ -17,12 +16,11 @@ import { Button } from '../components/button'
 import { ToastMessage } from '../components/toast-message'
 import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 
-import { api } from '@src/services/api'
 import { AppError } from '../utils/app-error'
+import { createUser } from '../https/create-user'
 
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '@src/assets/background.png'
-import { colors } from '../styles/colors'
 
 const FormSchema = z
   .object({
@@ -70,13 +68,7 @@ export function SignUp() {
 
   async function handleSignUp({ name, email, password }: FormData) {
     try {
-      const response = await api.post('/users', {
-        name,
-        email,
-        password,
-      })
-
-      console.log(response.data)
+      await createUser({ name, email, password })
     } catch (error) {
       const isAppError = error instanceof AppError
 
@@ -85,6 +77,7 @@ export function SignUp() {
         : 'Não foi possível criar a conta. Tente novamente mais tarde.'
 
       toast.show({
+        placement: 'top',
         render: ({ id }) => (
           <ToastMessage
             id={id}
@@ -93,7 +86,6 @@ export function SignUp() {
             onClose={() => toast.close(id)}
           />
         ),
-        placement: 'top',
       })
     }
   }
