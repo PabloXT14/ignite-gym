@@ -4,6 +4,8 @@ import type { UserDTO } from '../dtos/user-dto'
 
 import { makeSignIn } from '../https/make-sign-in'
 
+import { saveUserStorage } from '../storage/user-storage'
+
 export type AuthContextData = {
   user: UserDTO
   signIn: (email: string, password: string) => Promise<void>
@@ -24,6 +26,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       if (user) {
         setUser(user)
+        saveUserStorage(user)
       }
     } catch (error) {
       throw error
