@@ -1,10 +1,10 @@
-import { createContext, useState, type ReactNode } from 'react'
+import { createContext, useEffect, useState, type ReactNode } from 'react'
 
 import type { UserDTO } from '../dtos/user-dto'
 
 import { makeSignIn } from '../https/make-sign-in'
 
-import { saveUserStorage } from '../storage/user-storage'
+import { getUserStorage, saveUserStorage } from '../storage/user-storage'
 
 export type AuthContextData = {
   user: UserDTO
@@ -32,6 +32,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       throw error
     }
   }
+
+  async function loadUserData() {
+    const userLogged = await getUserStorage()
+
+    if (userLogged) {
+      setUser(userLogged)
+    }
+  }
+
+  useEffect(() => {
+    loadUserData()
+  }, [])
 
   return (
     <AuthContext.Provider
