@@ -1,3 +1,4 @@
+import { TouchableOpacity } from 'react-native'
 import { LogOut } from 'lucide-react-native'
 
 import { Heading } from '@/components/ui/heading'
@@ -12,7 +13,7 @@ import { useAuth } from '../hooks/use-auth'
 import defaultUserPhotoImg from '@src/assets/userPhotoDefault.png'
 
 export function HomeHeader() {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
 
   return (
     <HStack className="bg-gray-600 pt-16 pb-5 px-8 items-center gap-4">
@@ -30,7 +31,9 @@ export function HomeHeader() {
         </Heading>
       </VStack>
 
-      <Icon as={LogOut} className="text-gray-200" size="xl" />
+      <TouchableOpacity onPress={signOut}>
+        <Icon as={LogOut} className="text-gray-200" size="xl" />
+      </TouchableOpacity>
     </HStack>
   )
 }

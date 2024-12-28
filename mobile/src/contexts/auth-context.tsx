@@ -4,11 +4,16 @@ import type { UserDTO } from '../dtos/user-dto'
 
 import { makeSignIn } from '../https/make-sign-in'
 
-import { getUserStorage, saveUserStorage } from '../storage/user-storage'
+import {
+  getUserStorage,
+  removeUserStorage,
+  saveUserStorage,
+} from '../storage/user-storage'
 
 export type AuthContextData = {
   user: UserDTO
   signIn: (email: string, password: string) => Promise<void>
+  signOut: () => Promise<void>
   isLoadingUserStorageData: boolean
 }
 
@@ -36,6 +41,20 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function signOut() {
+    try {
+      setIsLoadingUserStorageData(true)
+
+      setUser({} as UserDTO)
+
+      await removeUserStorage()
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoadingUserStorageData(false)
+    }
+  }
+
   async function loadUserData() {
     try {
       const userLogged = await getUserStorage()
@@ -59,6 +78,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       value={{
         user,
         signIn,
+        signOut,
         isLoadingUserStorageData,
       }}
     >
