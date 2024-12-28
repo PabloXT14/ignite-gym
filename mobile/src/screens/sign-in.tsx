@@ -9,10 +9,13 @@ import { Image } from '@/components/ui/image'
 import { Center } from '@/components/ui/center'
 import { Text } from '@/components/ui/text'
 import { Heading } from '@/components/ui/heading'
+import { useToast } from '@/components/ui/toast'
 
 import { Input } from '../components/input'
 import { Button } from '../components/button'
+import { ToastMessage } from '../components/toast-message'
 import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
+import { AppError } from '../utils/app-error'
 import { useAuth } from '../hooks/use-auth'
 
 import Logo from '@src/assets/logo.svg'
@@ -32,6 +35,8 @@ type FormData = z.infer<typeof FormSchema>
 export function SignIn() {
   const { signIn } = useAuth()
 
+  const toast = useToast()
+
   const {
     control,
     handleSubmit,
@@ -47,7 +52,29 @@ export function SignIn() {
   }
 
   async function handleSignIn({ email, password }: FormData) {
-    await signIn(email, password)
+    try {
+      await signIn(email, password)
+    } catch (error) {
+      console.log(error)
+
+      const isAppError = error instanceof AppError
+
+      const title = isAppError
+        ? error.message
+        : 'Nao foi possível entrar. Tente novamente ou mais tarde.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+            onClose={() => toast.close(id)}
+          />
+        ),
+      })
+    }
   }
 
   return (
