@@ -14,12 +14,10 @@ export function Routes() {
 
   theme.colors.background = colors.gray[700]
 
-  console.log('USUÁRIO LOGADO => ', user)
-
   return (
     <Box className="flex-1 bg-gray-700">
       <NavigationContainer theme={theme}>
-        <AuthRoutes />
+        {user.id ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
   )
