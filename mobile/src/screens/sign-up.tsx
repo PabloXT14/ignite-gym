@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
@@ -18,6 +19,7 @@ import type { AuthNavigatorRoutesProps } from '../routes/auth.routes'
 
 import { AppError } from '../utils/app-error'
 import { createUser } from '../https/create-user'
+import { useAuth } from '../hooks/use-auth'
 
 import Logo from '@src/assets/logo.svg'
 import backgroundImg from '@src/assets/background.png'
@@ -50,6 +52,9 @@ const FormSchema = z
 type FormData = z.infer<typeof FormSchema>
 
 export function SignUp() {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { signIn } = useAuth()
   const toast = useToast()
 
   const {
@@ -68,7 +73,11 @@ export function SignUp() {
 
   async function handleSignUp({ name, email, password }: FormData) {
     try {
+      setIsLoading(true)
+
       await createUser({ name, email, password })
+
+      await signIn(email, password)
     } catch (error) {
       const isAppError = error instanceof AppError
 
@@ -87,6 +96,8 @@ export function SignUp() {
           />
         ),
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -176,6 +187,7 @@ export function SignUp() {
             <Button
               title="Criar e acessar"
               onPress={handleSubmit(handleSignUp)}
+              isLoading={isLoading}
             />
           </Center>
 
