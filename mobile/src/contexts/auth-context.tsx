@@ -9,6 +9,7 @@ import {
   removeUserStorage,
   saveUserStorage,
 } from '../storage/user-storage'
+import { saveAuthTokenStorage } from '../storage/auth-token-storage'
 
 export type AuthContextData = {
   user: UserDTO
@@ -28,13 +29,27 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true)
 
+  async function storageUserAndToken(useData: UserDTO, token: string) {
+    try {
+      setIsLoadingUserStorageData(true)
+
+      await saveUserStorage(useData)
+      await saveAuthTokenStorage(token)
+
+      setUser(useData)
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoadingUserStorageData(false)
+    }
+  }
+
   async function signIn(email: string, password: string) {
     try {
       const { user, token } = await makeSignIn({ email, password })
 
       if (user && token) {
-        setUser(user)
-        saveUserStorage(user)
+        await storageUserAndToken(user, token)
       }
     } catch (error) {
       throw error
