@@ -2,6 +2,7 @@ import { createContext, useEffect, useState, type ReactNode } from 'react'
 
 import type { UserDTO } from '../dtos/user-dto'
 
+import { api } from '../services/api'
 import { makeSignIn } from '../https/make-sign-in'
 
 import {
@@ -9,7 +10,10 @@ import {
   removeUserStorage,
   saveUserStorage,
 } from '../storage/user-storage'
-import { saveAuthTokenStorage } from '../storage/auth-token-storage'
+import {
+  getAuthTokenStorage,
+  saveAuthTokenStorage,
+} from '../storage/auth-token-storage'
 
 export type AuthContextData = {
   user: UserDTO
@@ -29,14 +33,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true)
 
+  async function updateUserAndToken(userData: UserDTO, token: string) {
+    api.defaults.headers.common.Authorization = `Bearer ${token}`
+
+    setUser(userData)
+  }
+
   async function storageUserAndToken(useData: UserDTO, token: string) {
     try {
       setIsLoadingUserStorageData(true)
 
       await saveUserStorage(useData)
       await saveAuthTokenStorage(token)
-
-      setUser(useData)
     } catch (error) {
       throw error
     } finally {
@@ -50,6 +58,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       if (user && token) {
         await storageUserAndToken(user, token)
+        await updateUserAndToken(user, token)
       }
     } catch (error) {
       throw error
@@ -72,10 +81,13 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function loadUserData() {
     try {
-      const userLogged = await getUserStorage()
+      setIsLoadingUserStorageData(true)
 
-      if (userLogged) {
-        setUser(userLogged)
+      const userLogged = await getUserStorage()
+      const token = await getAuthTokenStorage()
+
+      if (userLogged && token) {
+        await updateUserAndToken(userLogged, token)
       }
     } catch (error) {
       throw error
