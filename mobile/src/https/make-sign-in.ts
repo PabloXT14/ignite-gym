@@ -8,15 +8,17 @@ type MakeSignInRequest = {
 
 type MakeSignInResponse = {
   user: UserDTO
+  token: string
 }
 
 export async function makeSignIn({
   email,
   password,
 }: MakeSignInRequest): Promise<MakeSignInResponse> {
-  const response = await api.post('/sessions', { email, password })
+  const { data } = await api.post('/sessions', { email, password })
 
   return {
-    user: response.data.user,
+    user: data.user,
+    token: data.token,
   }
 }

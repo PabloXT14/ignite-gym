@@ -30,9 +30,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function signIn(email: string, password: string) {
     try {
-      const { user } = await makeSignIn({ email, password })
+      const { user, token } = await makeSignIn({ email, password })
 
-      if (user) {
+      if (user && token) {
         setUser(user)
         saveUserStorage(user)
       }
