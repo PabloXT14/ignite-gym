@@ -11,6 +11,8 @@ import { Icon } from '@/components/ui/icon'
 
 import type { ExerciseDTO } from '../dtos/exercise-dto'
 
+import { api } from '../services/api'
+
 type ExerciseCardProps = TouchableOpacityProps & {
   data: ExerciseDTO
 }
@@ -21,7 +23,7 @@ export function ExerciseCard({ className, data, ...props }: ExerciseCardProps) {
       <HStack className="bg-gray-500 items-center p-2.5 pr-4 rounded-lg ">
         <Image
           source={{
-            uri: 'https://conteudo.imguol.com.br/c/entretenimento/0c/2019/12/03/remada-unilateral-com-halteres-1575402100538_v2_600x600.jpg',
+            uri: `${api.defaults.baseURL}/exercise/thumb/${data.thumb}`,
           }}
           alt="Imagem do exercício"
           className="size-16 rounded-md mr-4"
