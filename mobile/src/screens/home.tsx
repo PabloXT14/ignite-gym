@@ -129,7 +129,7 @@ export function Home() {
           data={exercises}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
-            <ExerciseCard onPress={handleOpenExerciseDetails} />
+            <ExerciseCard data={item} onPress={handleOpenExerciseDetails} />
           )}
           showsVerticalScrollIndicator={false}
           contentContainerClassName="pb-5 gap-3"
