@@ -14,6 +14,7 @@ import { useToast } from '@/components/ui/toast'
 
 import { Button } from '../components/button'
 import { ToastMessage } from '../components/toast-message'
+import { Loading } from '../components/loading'
 
 import type { AppNavigatorRoutesProps } from '../routes/app.routes'
 import type { ExerciseDTO } from '../dtos/exercise-dto'
@@ -32,17 +33,18 @@ type RouteParamsProps = {
 
 export function Exercise() {
   const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO)
+  const [isLoading, setIsLoading] = useState(true)
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   const route = useRoute()
-
   const { exerciseId } = route.params as RouteParamsProps
 
   const toast = useToast()
 
   async function fetchExerciseDetails() {
     try {
+      setIsLoading(true)
       const exercise = await getExerciseById(exerciseId)
 
       setExercise(exercise)
@@ -64,6 +66,8 @@ export function Exercise() {
           />
         ),
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -74,10 +78,6 @@ export function Exercise() {
   useEffect(() => {
     fetchExerciseDetails()
   }, [exerciseId])
-
-  if (Object.keys(exercise).length === 0) {
-    return null
-  }
 
   return (
     <VStack className="flex-1">
@@ -99,10 +99,9 @@ export function Exercise() {
         </HStack>
       </VStack>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerClassName="pb-8"
-      >
+      {isLoading ? (
+        <Loading />
+      ) : (
         <VStack className="p-8">
           <Box className="rounded-lg mb-4 overflow-hidden">
             <Image
@@ -135,7 +134,7 @@ export function Exercise() {
             <Button title="Marcar como realizado" />
           </Box>
         </VStack>
-      </ScrollView>
+      )}
     </VStack>
   )
 }

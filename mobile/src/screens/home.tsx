@@ -23,7 +23,7 @@ import { getExercisesByGroup } from '../https/get-exercises-by-group'
 
 export function Home() {
   const [groups, setGroups] = useState<string[]>([])
-  const [groupSelected, setGroupSelected] = useState('costas')
+  const [groupSelected, setGroupSelected] = useState('')
 
   const [exercises, setExercises] = useState<ExerciseDTO[]>([])
 
@@ -40,6 +40,7 @@ export function Home() {
     try {
       const groups = await getGroups()
       setGroups(groups)
+      setGroupSelected(groups[0])
     } catch (error) {
       const isAppError = error instanceof AppError
 
