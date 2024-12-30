@@ -1,6 +1,6 @@
 import { TouchableOpacity, ScrollView } from 'react-native'
 import { ArrowLeft } from 'lucide-react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { VStack } from '@/components/ui/vstack'
 import { Icon } from '@/components/ui/icon'
@@ -17,8 +17,18 @@ import BodySvg from '@src/assets/body.svg'
 import SeriesSvg from '@src/assets/series.svg'
 import RepetitionsSvg from '@src/assets/repetitions.svg'
 
+type RouteParamsProps = {
+  exerciseId: string
+}
+
 export function Exercise() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  const route = useRoute()
+
+  const { exerciseId } = route.params as RouteParamsProps
+
+  console.log('EXERCISE ID: ', exerciseId)
 
   function handleGoBack() {
     navigation.goBack()
