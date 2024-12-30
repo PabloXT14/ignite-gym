@@ -62,8 +62,6 @@ export function Home() {
     try {
       const exercises = await getExercisesByGroup(groupSelected)
 
-      console.log(exercises)
-
       setExercises(exercises)
     } catch (error) {
       const isAppError = error instanceof AppError
