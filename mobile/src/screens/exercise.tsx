@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { TouchableOpacity, ScrollView } from 'react-native'
 import { ArrowLeft } from 'lucide-react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -7,11 +8,19 @@ import { Icon } from '@/components/ui/icon'
 import { HStack } from '@/components/ui/hstack'
 import { Heading } from '@/components/ui/heading'
 import { Text } from '@/components/ui/text'
-import { Image } from '@/components/ui/image'
 import { Box } from '@/components/ui/box'
+import { Image } from '@/components/ui/image'
+import { useToast } from '@/components/ui/toast'
+
+import { Button } from '../components/button'
+import { ToastMessage } from '../components/toast-message'
 
 import type { AppNavigatorRoutesProps } from '../routes/app.routes'
-import { Button } from '../components/button'
+import type { ExerciseDTO } from '../dtos/exercise-dto'
+
+import { AppError } from '../utils/app-error'
+import { getExerciseById } from '../https/get-exercise-by-id'
+import { api } from '../services/api'
 
 import BodySvg from '@src/assets/body.svg'
 import SeriesSvg from '@src/assets/series.svg'
@@ -22,16 +31,52 @@ type RouteParamsProps = {
 }
 
 export function Exercise() {
+  const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO)
+
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   const route = useRoute()
 
   const { exerciseId } = route.params as RouteParamsProps
 
-  console.log('EXERCISE ID: ', exerciseId)
+  const toast = useToast()
+
+  async function fetchExerciseDetails() {
+    try {
+      const exercise = await getExerciseById(exerciseId)
+
+      setExercise(exercise)
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível carregar os detalhes do exercício.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+            onClose={() => toast.close(id)}
+          />
+        ),
+      })
+    }
+  }
 
   function handleGoBack() {
     navigation.goBack()
+  }
+
+  useEffect(() => {
+    fetchExerciseDetails()
+  }, [exerciseId])
+
+  if (Object.keys(exercise).length === 0) {
+    return null
   }
 
   return (
@@ -43,13 +88,13 @@ export function Exercise() {
 
         <HStack className="justify-between items-center mt-4 mb-8">
           <Heading className="text-gray-100 text-lg font-bold shrink">
-            Puxada frontal
+            {exercise.name}
           </Heading>
 
           <HStack className="items-center gap-1">
             <BodySvg />
 
-            <Text className="text-gray-200 capitalize">Costas</Text>
+            <Text className="text-gray-200 capitalize">{exercise.group}</Text>
           </HStack>
         </HStack>
       </VStack>
@@ -59,25 +104,31 @@ export function Exercise() {
         contentContainerClassName="pb-8"
       >
         <VStack className="p-8">
-          <Image
-            source={{
-              uri: 'https://static.wixstatic.com/media/2edbed_60c206e178ad4eb3801f4f47fc6523df~mv2.webp/v1/fill/w_350,h_375,al_c/2edbed_60c206e178ad4eb3801f4f47fc6523df~mv2.webp',
-            }}
-            alt="Exercício"
-            className="mb-4 w-full h-[364px] rounded-lg"
-            resizeMode="cover"
-          />
+          <Box className="rounded-lg mb-4 overflow-hidden">
+            <Image
+              source={{
+                uri: `${api.defaults.baseURL}/exercise/demo/${exercise.demo}`,
+              }}
+              alt={exercise.name}
+              className="w-full h-[364px] rounded-lg"
+              resizeMode="cover"
+            />
+          </Box>
 
           <Box className="bg-gray-600 rounded-lg pb-4 px-4">
             <HStack className="items-center justify-around mb-6 mt-5">
               <HStack>
                 <SeriesSvg />
-                <Text className="text-gray-200 ml-2">3 séries</Text>
+                <Text className="text-gray-200 ml-2">
+                  {exercise.series} séries
+                </Text>
               </HStack>
 
               <HStack>
                 <RepetitionsSvg />
-                <Text className="text-gray-200 ml-2">12 repetições</Text>
+                <Text className="text-gray-200 ml-2">
+                  {exercise.repetitions} repetições
+                </Text>
               </HStack>
             </HStack>
 
