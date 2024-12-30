@@ -12,6 +12,7 @@ import { HomeHeader } from '../components/home-header'
 import { Group } from '../components/group'
 import { ExerciseCard } from '../components/exercise-card'
 import { ToastMessage } from '../components/toast-message'
+import { Loading } from '../components/loading'
 
 import type { AppNavigatorRoutesProps } from '../routes/app.routes'
 import type { ExerciseDTO } from '../dtos/exercise-dto'
@@ -25,6 +26,8 @@ export function Home() {
   const [groupSelected, setGroupSelected] = useState('costas')
 
   const [exercises, setExercises] = useState<ExerciseDTO[]>([])
+
+  const [isLoading, setIsLoading] = useState(true)
 
   const toast = useToast()
   const navigation = useNavigation<AppNavigatorRoutesProps>()
@@ -60,6 +63,8 @@ export function Home() {
 
   async function fetchExercisesByGroup() {
     try {
+      setIsLoading(true)
+
       const exercises = await getExercisesByGroup(groupSelected)
 
       setExercises(exercises)
@@ -81,6 +86,8 @@ export function Home() {
           />
         ),
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -114,27 +121,31 @@ export function Home() {
         style={{ marginVertical: 40, maxHeight: 44, minHeight: 44 }}
       />
 
-      <VStack className="px-8 flex-1">
-        <HStack className="justify-between items-center mb-5">
-          <Heading className="text-gray-200 text-base font-bold">
-            Exercícios
-          </Heading>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <VStack className="px-8 flex-1">
+          <HStack className="justify-between items-center mb-5">
+            <Heading className="text-gray-200 text-base font-bold">
+              Exercícios
+            </Heading>
 
-          <Text className="text-gray-200 text-sm font-regular">
-            {exercises.length}
-          </Text>
-        </HStack>
+            <Text className="text-gray-200 text-sm font-regular">
+              {exercises.length}
+            </Text>
+          </HStack>
 
-        <FlatList
-          data={exercises}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <ExerciseCard data={item} onPress={handleOpenExerciseDetails} />
-          )}
-          showsVerticalScrollIndicator={false}
-          contentContainerClassName="pb-5 gap-3"
-        />
-      </VStack>
+          <FlatList
+            data={exercises}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+              <ExerciseCard data={item} onPress={handleOpenExerciseDetails} />
+            )}
+            showsVerticalScrollIndicator={false}
+            contentContainerClassName="pb-5 gap-3"
+          />
+        </VStack>
+      )}
     </VStack>
   )
 }
