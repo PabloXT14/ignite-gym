@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FlatList } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -6,15 +6,20 @@ import { VStack } from '@/components/ui/vstack'
 import { HStack } from '@/components/ui/hstack'
 import { Heading } from '@/components/ui/heading'
 import { Text } from '@/components/ui/text'
+import { useToast } from '@/components/ui/toast'
 
 import { HomeHeader } from '../components/home-header'
 import { Group } from '../components/group'
 import { ExerciseCard } from '../components/exercise-card'
+import { ToastMessage } from '../components/toast-message'
 
 import type { AppNavigatorRoutesProps } from '../routes/app.routes'
 
+import { getGroups } from '../https/get-groups'
+import { AppError } from '../utils/app-error'
+
 export function Home() {
-  const [groups, setGroups] = useState(['costas', 'bíceps', 'tríceps', 'ombro'])
+  const [groups, setGroups] = useState<string[]>([])
   const [groupSelected, setGroupSelected] = useState('costas')
 
   const [exercises, setExercises] = useState([
@@ -26,11 +31,41 @@ export function Home() {
     'Remada na barra',
   ])
 
+  const toast = useToast()
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   function handleOpenExerciseDetails() {
     navigation.navigate('exercise')
   }
+
+  async function fetchGroups() {
+    try {
+      const groups = await getGroups()
+      setGroups(groups)
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível carregar os grupos musculares.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+            onClose={() => toast.close(id)}
+          />
+        ),
+      })
+    }
+  }
+
+  useEffect(() => {
+    fetchGroups()
+  }, [])
 
   return (
     <VStack className="flex-1">
