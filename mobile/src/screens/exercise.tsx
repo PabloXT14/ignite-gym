@@ -19,9 +19,10 @@ import { Loading } from '../components/loading'
 import type { AppNavigatorRoutesProps } from '../routes/app.routes'
 import type { ExerciseDTO } from '../dtos/exercise-dto'
 
+import { api } from '../services/api'
 import { AppError } from '../utils/app-error'
 import { getExerciseById } from '../https/get-exercise-by-id'
-import { api } from '../services/api'
+import { registerExerciseHistory } from '../https/register-exercise-history'
 
 import BodySvg from '@src/assets/body.svg'
 import SeriesSvg from '@src/assets/series.svg'
@@ -34,6 +35,8 @@ type RouteParamsProps = {
 export function Exercise() {
   const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO)
   const [isLoading, setIsLoading] = useState(true)
+
+  const [sendingRegisterHistory, setSendingRegisterHistory] = useState(false)
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -68,6 +71,48 @@ export function Exercise() {
       })
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  async function handleRegisterExerciseHistory() {
+    try {
+      setSendingRegisterHistory(true)
+
+      await registerExerciseHistory({ exerciseId })
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title="Parabéns! Exercício registrado no seu histórico."
+            action="success"
+            onClose={() => toast.close(id)}
+          />
+        ),
+      })
+
+      navigation.navigate('history')
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível registrar o exercício.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+            onClose={() => toast.close(id)}
+          />
+        ),
+      })
+    } finally {
+      setSendingRegisterHistory(false)
     }
   }
 
@@ -131,7 +176,11 @@ export function Exercise() {
               </HStack>
             </HStack>
 
-            <Button title="Marcar como realizado" />
+            <Button
+              title="Marcar como realizado"
+              isLoading={sendingRegisterHistory}
+              onPress={handleRegisterExerciseHistory}
+            />
           </Box>
         </VStack>
       )}
