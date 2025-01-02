@@ -23,7 +23,7 @@ import { useAuth } from '../hooks/use-auth'
 const profileFormSchema = z.object({
   name: z
     .string({ required_error: 'O nome é obrigatório' })
-    .min(3, { message: 'O nome precisa ter pelo menos 3 letras' }),
+    .nonempty('O nome é obrigatório'),
   email: z
     .string({ required_error: 'O e-mail é obrigatório' })
     .email({ message: 'Formato de e-mail inválido' }),
@@ -43,7 +43,11 @@ const MAX_IMAGE_SIZE_MB = 5
 export function Profile() {
   const { user } = useAuth()
 
-  const { control, handleSubmit } = useForm<ProfileFormData>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileFormData>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: user.name,
@@ -150,6 +154,7 @@ export function Profile() {
                   className="bg-gray-600"
                   value={value}
                   onChangeText={onChange}
+                  errorMessage={errors.name?.message}
                 />
               )}
             />
@@ -163,6 +168,7 @@ export function Profile() {
                   onChangeText={onChange}
                   className="bg-gray-600"
                   isReadOnly
+                  errorMessage={errors.email?.message}
                 />
               )}
             />
@@ -182,6 +188,7 @@ export function Profile() {
                   className="bg-gray-600"
                   secureTextEntry
                   onChangeText={onChange}
+                  errorMessage={errors.old_password?.message}
                 />
               )}
             />
@@ -195,6 +202,7 @@ export function Profile() {
                   className="bg-gray-600"
                   secureTextEntry
                   onChangeText={onChange}
+                  errorMessage={errors.new_password?.message}
                 />
               )}
             />
@@ -208,6 +216,7 @@ export function Profile() {
                   className="bg-gray-600"
                   secureTextEntry
                   onChangeText={onChange}
+                  errorMessage={errors.confirm_new_password?.message}
                 />
               )}
             />
