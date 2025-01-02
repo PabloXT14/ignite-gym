@@ -61,6 +61,7 @@ export function Profile() {
     control,
     handleSubmit,
     formState: { errors },
+    clearErrors,
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -215,7 +216,13 @@ export function Profile() {
                   placeholder="Nova senha"
                   className="bg-gray-600"
                   secureTextEntry
-                  onChangeText={onChange}
+                  onChangeText={value => {
+                    onChange(value)
+
+                    if (!value) {
+                      clearErrors('confirm_password')
+                    }
+                  }}
                   errorMessage={errors.password?.message}
                 />
               )}
