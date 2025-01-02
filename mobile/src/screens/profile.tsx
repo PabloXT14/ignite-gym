@@ -176,12 +176,11 @@ export function Profile() {
             <Controller
               control={control}
               name="old_password"
-              render={({ field: { value, onChange } }) => (
+              render={({ field: { onChange } }) => (
                 <Input
                   placeholder="Senha antiga"
                   className="bg-gray-600"
                   secureTextEntry
-                  value={value}
                   onChangeText={onChange}
                 />
               )}
@@ -190,12 +189,11 @@ export function Profile() {
             <Controller
               control={control}
               name="new_password"
-              render={({ field: { value, onChange } }) => (
+              render={({ field: { onChange } }) => (
                 <Input
                   placeholder="Nova senha"
                   className="bg-gray-600"
                   secureTextEntry
-                  value={value}
                   onChangeText={onChange}
                 />
               )}
@@ -204,12 +202,11 @@ export function Profile() {
             <Controller
               control={control}
               name="confirm_new_password"
-              render={({ field: { value, onChange } }) => (
+              render={({ field: { onChange } }) => (
                 <Input
                   placeholder="Confirmar a nova senha"
                   className="bg-gray-600"
                   secureTextEntry
-                  value={value}
                   onChangeText={onChange}
                 />
               )}
