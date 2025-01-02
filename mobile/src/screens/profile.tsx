@@ -20,21 +20,35 @@ import { Button } from '../components/button'
 import { ToastMessage } from '../components/toast-message'
 import { useAuth } from '../hooks/use-auth'
 
-const profileFormSchema = z.object({
-  name: z
-    .string({ required_error: 'O nome é obrigatório' })
-    .nonempty('O nome é obrigatório'),
-  email: z
-    .string({ required_error: 'O e-mail é obrigatório' })
-    .email({ message: 'Formato de e-mail inválido' }),
-  old_password: z.string(),
-  new_password: z
-    .string()
-    .min(6, { message: 'A nova senha precisa ter pelo menos 6 letras' }),
-  confirm_new_password: z
-    .string()
-    .min(6, { message: 'A nova senha precisa ter pelo menos 6 letras' }),
-})
+const profileFormSchema = z
+  .object({
+    name: z
+      .string({ required_error: 'O nome é obrigatório' })
+      .nonempty('O nome é obrigatório'),
+    email: z
+      .string({ required_error: 'O e-mail é obrigatório' })
+      .email({ message: 'Formato de e-mail inválido' }),
+    old_password: z.string().optional(),
+    password: z
+      .string()
+      .min(6, { message: 'A nova senha precisa ter pelo menos 6 dígitos' })
+      .optional()
+      .or(z.literal(''))
+      .transform(value => (value ? value : null)),
+    confirm_password: z
+      .string()
+      .optional()
+      .transform(value => (value ? value : null)),
+  })
+  .refine(
+    values => {
+      return values.password === values.confirm_password
+    },
+    {
+      message: 'A confirmação da senha não confere',
+      path: ['confirm_password'],
+    }
+  )
 
 type ProfileFormData = z.infer<typeof profileFormSchema>
 
@@ -195,28 +209,28 @@ export function Profile() {
 
             <Controller
               control={control}
-              name="new_password"
+              name="password"
               render={({ field: { onChange } }) => (
                 <Input
                   placeholder="Nova senha"
                   className="bg-gray-600"
                   secureTextEntry
                   onChangeText={onChange}
-                  errorMessage={errors.new_password?.message}
+                  errorMessage={errors.password?.message}
                 />
               )}
             />
 
             <Controller
               control={control}
-              name="confirm_new_password"
+              name="confirm_password"
               render={({ field: { onChange } }) => (
                 <Input
                   placeholder="Confirmar a nova senha"
                   className="bg-gray-600"
                   secureTextEntry
                   onChangeText={onChange}
-                  errorMessage={errors.confirm_new_password?.message}
+                  errorMessage={errors.confirm_password?.message}
                 />
               )}
             />
