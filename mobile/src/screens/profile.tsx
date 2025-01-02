@@ -20,6 +20,9 @@ import { Button } from '../components/button'
 import { ToastMessage } from '../components/toast-message'
 import { useAuth } from '../hooks/use-auth'
 
+import { AppError } from '../utils/app-error'
+import { updateUser } from '../https/update-user'
+
 const profileFormSchema = z
   .object({
     name: z
@@ -70,6 +73,7 @@ export function Profile() {
     },
   })
 
+  const [isUpdating, setIsUpdating] = useState(false)
   const [userPhoto, setUserPhoto] = useState('https://github.com/pabloxt14.png')
 
   const toast = useToast()
@@ -123,21 +127,45 @@ export function Profile() {
 
   async function handleProfileUpdate(data: ProfileFormData) {
     try {
-      console.log(data)
-    } catch (error) {
-      console.log(error)
+      setIsUpdating(true)
+
+      await updateUser({
+        name: data.name,
+        password: data.password,
+        old_password: data.old_password,
+      })
 
       toast.show({
         placement: 'top',
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            action="error"
-            title="Erro ao atualizar perfil"
+            title="Perfil atualizado com sucesso!"
+            action="success"
             onClose={() => toast.close(id)}
           />
         ),
       })
+    } catch (error) {
+      const isAppError = error instanceof AppError
+
+      const title = isAppError
+        ? error.message
+        : 'Erro ao atualizar perfil. Tente novamente ou mais tarde.'
+
+      toast.show({
+        placement: 'top',
+        render: ({ id }) => (
+          <ToastMessage
+            id={id}
+            title={title}
+            action="error"
+            onClose={() => toast.close(id)}
+          />
+        ),
+      })
+    } finally {
+      setIsUpdating(false)
     }
   }
 
@@ -246,6 +274,7 @@ export function Profile() {
               title="Atualizar"
               className="mt-8"
               onPress={handleSubmit(handleProfileUpdate)}
+              isLoading={isUpdating}
             />
           </Center>
         </Center>
