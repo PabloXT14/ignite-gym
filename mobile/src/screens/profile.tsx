@@ -58,7 +58,7 @@ type ProfileFormData = z.infer<typeof profileFormSchema>
 const MAX_IMAGE_SIZE_MB = 5
 
 export function Profile() {
-  const { user } = useAuth()
+  const { user, updateUserProfile } = useAuth()
 
   const {
     control,
@@ -129,11 +129,14 @@ export function Profile() {
     try {
       setIsUpdating(true)
 
-      await updateUser({
-        name: data.name,
-        password: data.password,
-        old_password: data.old_password,
-      })
+      const userUpdated = user
+      userUpdated.name = data.name
+
+      // Request to update user
+      await updateUser(data)
+
+      // Update user data on context
+      await updateUserProfile(userUpdated)
 
       toast.show({
         placement: 'top',
