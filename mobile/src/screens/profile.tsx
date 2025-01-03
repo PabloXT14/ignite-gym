@@ -22,6 +22,7 @@ import { useAuth } from '../hooks/use-auth'
 
 import { AppError } from '../utils/app-error'
 import { updateUser } from '../https/update-user'
+import { updateUserPhoto } from '../https/update-user-photo'
 
 const profileFormSchema = z
   .object({
@@ -120,9 +121,26 @@ export function Profile() {
           name: `${user.name}.${fileExtension}`.toLowerCase(),
           uri: photoUri,
           type: `${photoSelected.assets[0].type}/${fileExtension}`,
-        }
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        } as any
 
-        console.log(photoFile)
+        const userPhotoUploadForm = new FormData()
+
+        userPhotoUploadForm.append('avatar', photoFile)
+
+        await updateUserPhoto({ photoForm: userPhotoUploadForm })
+
+        toast.show({
+          placement: 'top',
+          render: ({ id }) => (
+            <ToastMessage
+              id={id}
+              action="success"
+              title="Foto atualizada com sucesso!"
+              onClose={() => toast.close(id)}
+            />
+          ),
+        })
 
         setUserPhoto(photoUri)
       }
