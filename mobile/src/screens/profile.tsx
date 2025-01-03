@@ -128,7 +128,14 @@ export function Profile() {
 
         userPhotoUploadForm.append('avatar', photoFile)
 
-        await updateUserPhoto({ photoForm: userPhotoUploadForm })
+        const avatarUpdatedResponse = await updateUserPhoto({
+          photoForm: userPhotoUploadForm,
+        })
+
+        const userUpdated = user
+        userUpdated.avatar = avatarUpdatedResponse.avatar
+
+        await updateUserProfile(userUpdated)
 
         toast.show({
           placement: 'top',
