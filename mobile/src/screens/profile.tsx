@@ -20,9 +20,12 @@ import { Button } from '../components/button'
 import { ToastMessage } from '../components/toast-message'
 import { useAuth } from '../hooks/use-auth'
 
+import { api } from '../services/api'
 import { AppError } from '../utils/app-error'
 import { updateUser } from '../https/update-user'
 import { updateUserPhoto } from '../https/update-user-photo'
+
+import defaultUserPhotoImg from '@src/assets/userPhotoDefault.png'
 
 const profileFormSchema = z
   .object({
@@ -75,7 +78,6 @@ export function Profile() {
   })
 
   const [isUpdating, setIsUpdating] = useState(false)
-  const [userPhoto, setUserPhoto] = useState('https://github.com/pabloxt14.png')
 
   const toast = useToast()
 
@@ -148,8 +150,6 @@ export function Profile() {
             />
           ),
         })
-
-        setUserPhoto(photoUri)
       }
     } catch (error) {
       console.log(error)
@@ -214,7 +214,11 @@ export function Profile() {
       <ScrollView contentContainerClassName="pb-9">
         <Center className="mt-6 px-10">
           <UserPhoto
-            source={{ uri: userPhoto }}
+            source={
+              user.avatar
+                ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+                : defaultUserPhotoImg
+            }
             alt="Imagem do Usuário"
             size="xl"
           />
