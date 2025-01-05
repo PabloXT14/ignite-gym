@@ -1,7 +1,10 @@
 import axios, { type AxiosError, type AxiosInstance } from 'axios'
 
 import { AppError } from '../utils/app-error'
-import { getAuthTokenStorage } from '../storage/auth-token-storage'
+import {
+  getAuthTokenStorage,
+  saveAuthTokenStorage,
+} from '../storage/auth-token-storage'
 
 type SignOut = () => void
 
@@ -18,7 +21,7 @@ const api = axios.create({
   baseURL: 'http://192.168.2.123:3333',
 }) as APIInstanceProps
 
-const failedQueue: Array<PromiseType> = []
+let failedQueue: Array<PromiseType> = []
 let isRefreshing = false
 
 api.registerInterceptTokenManager = signOut => {
@@ -57,6 +60,32 @@ api.registerInterceptTokenManager = signOut => {
           }
 
           isRefreshing = true
+
+          // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
+          return new Promise(async (_resolve, reject) => {
+            try {
+              const { data } = await api.post('/sessions/refresh-token', {
+                refresh_token,
+              })
+
+              await saveAuthTokenStorage({
+                token: data.token,
+                refresh_token: data.refresh_token,
+              })
+              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            } catch (error: any) {
+              // biome-ignore lint/complexity/noForEach: <explanation>
+              failedQueue.forEach(request => {
+                request.onFailure(error)
+              })
+
+              signOut()
+              reject(error)
+            } finally {
+              isRefreshing = false
+              failedQueue = []
+            }
+          })
         }
 
         // Desloga o usuário por algum erro de autorização qualquer que não esteja relacionado ao token
