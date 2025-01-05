@@ -21,7 +21,7 @@ async function ensureAuthenticated(request, response, next) {
 
     return next();
   } catch {
-    throw new AppError("Token expired", 401);
+    throw new AppError("token.expired", 401);
   }
 }
 

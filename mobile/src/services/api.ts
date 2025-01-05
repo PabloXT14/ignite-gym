@@ -14,12 +14,24 @@ const api = axios.create({
 api.registerInterceptTokenManager = signOut => {
   const interceptTokenManager = api.interceptors.response.use(
     response => response,
-    error => {
-      if (error.response?.data) {
-        return Promise.reject(new AppError(error.response.data.message))
+    requestError => {
+      if (requestError?.response?.status === 401) {
+        if (
+          requestError.response?.data?.message === 'token.expired' ||
+          requestError.response?.data?.message === 'token.invalid'
+        ) {
+          // TODO: refresh token
+        }
+
+        // Desloga o usuário por algum erro de autorização qualquer que não esteja relacionado ao token
+        signOut()
       }
 
-      return Promise.reject(error)
+      if (requestError.response?.data) {
+        return Promise.reject(new AppError(requestError.response.data.message))
+      }
+
+      return Promise.reject(requestError)
     }
   )
 
