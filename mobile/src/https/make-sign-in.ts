@@ -9,6 +9,7 @@ type MakeSignInRequest = {
 type MakeSignInResponse = {
   user: UserDTO
   token: string
+  refresh_token: string
 }
 
 export async function makeSignIn({
@@ -24,5 +25,6 @@ export async function makeSignIn({
   return {
     user: data.user,
     token: data.token,
+    refresh_token: data.refresh_token,
   }
 }
