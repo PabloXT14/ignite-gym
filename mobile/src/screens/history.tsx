@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/toast'
 import { ScreenHeader } from '../components/screen-header'
 import { HistoryCard } from '../components/history-card'
 import { ToastMessage } from '../components/toast-message'
+import { Loading } from '../components/loading'
 
 import { getHistory } from '../https/get-history'
 import { AppError } from '../utils/app-error'
@@ -62,30 +63,34 @@ export function History() {
     <VStack className="flex-1">
       <ScreenHeader title="Histórico de Exercícios" />
 
-      <SectionList
-        sections={exercises}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => <HistoryCard data={item} />}
-        renderSectionHeader={({ section }) => (
-          <Heading className="text-gray-200 text-base font-bold mt-10 mb-3">
-            {section.title}
-          </Heading>
-        )}
-        className="px-8"
-        contentContainerStyle={
-          exercises.length === 0 && {
-            flex: 1,
-            justifyContent: 'center',
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <SectionList
+          sections={exercises}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({ item }) => <HistoryCard data={item} />}
+          renderSectionHeader={({ section }) => (
+            <Heading className="text-gray-200 text-base font-bold mt-10 mb-3">
+              {section.title}
+            </Heading>
+          )}
+          className="px-8"
+          contentContainerStyle={
+            exercises.length === 0 && {
+              flex: 1,
+              justifyContent: 'center',
+            }
           }
-        }
-        ListEmptyComponent={() => (
-          <Text className="text-gray-200 text-center">
-            Não há exercícios registrados ainda. {'\n'} Vamos fazer exercícios
-            hoje?
-          </Text>
-        )}
-        showsVerticalScrollIndicator={false}
-      />
+          ListEmptyComponent={() => (
+            <Text className="text-gray-200 text-center">
+              Não há exercícios registrados ainda. {'\n'} Vamos fazer exercícios
+              hoje?
+            </Text>
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </VStack>
   )
 }
