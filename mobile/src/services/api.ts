@@ -62,7 +62,7 @@ api.registerInterceptTokenManager = signOut => {
           isRefreshing = true
 
           // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
-          return new Promise(async (_resolve, reject) => {
+          return new Promise(async (resolve, reject) => {
             try {
               const { data } = await api.post('/sessions/refresh-token', {
                 refresh_token,
@@ -72,6 +72,27 @@ api.registerInterceptTokenManager = signOut => {
                 token: data.token,
                 refresh_token: data.refresh_token,
               })
+
+              if (originalRequestConfig.data) {
+                originalRequestConfig.data = JSON.parse(
+                  originalRequestConfig.data
+                )
+              }
+
+              // Atualizando o token no header da requisição
+              originalRequestConfig.headers = {
+                Authorization: `Bearer ${data.token}`,
+              }
+              api.defaults.headers.common.Authorization = `Bearer ${data.token}`
+
+              // biome-ignore lint/complexity/noForEach: <explanation>
+              failedQueue.forEach(request => {
+                request.onSuccess(data.token)
+              })
+
+              console.log('TOKEN ATUALIZADO')
+
+              resolve(api(originalRequestConfig))
               // biome-ignore lint/suspicious/noExplicitAny: <explanation>
             } catch (error: any) {
               // biome-ignore lint/complexity/noForEach: <explanation>
