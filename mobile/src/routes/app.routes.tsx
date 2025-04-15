@@ -41,8 +41,8 @@ export function AppRoutes() {
           backgroundColor: colors.gray[600],
           borderTopWidth: 0,
           height: Platform.OS === 'android' ? 'auto' : 96,
-          paddingTop: 24,
-          paddingBottom: 56,
+          paddingTop: 10,
+          paddingBottom: 50,
         },
       }}
     >

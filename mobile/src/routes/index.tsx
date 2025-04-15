@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import * as NavigationBar  from 'expo-navigation-bar'
 
 import { Box } from '@/components/ui/box'
 import { AuthRoutes } from './auth.routes'
@@ -7,6 +9,7 @@ import { Loading } from '../components/loading'
 import { useAuth } from '../hooks/use-auth'
 
 import { colors } from '../styles/colors'
+import { Platform } from 'react-native'
 
 export function Routes() {
   const { user, isLoadingUserStorageData } = useAuth()
@@ -18,6 +21,12 @@ export function Routes() {
   if (isLoadingUserStorageData) {
     return <Loading />
   }
+
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      NavigationBar.setBackgroundColorAsync(colors.gray[600])
+    }
+  }, [])
 
   return (
     <Box className="flex-1 bg-gray-700">
