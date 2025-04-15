@@ -19,6 +19,8 @@ export default function App() {
     Roboto_700Bold,
   })
 
+  console.log('ONESIGNAL_APP_ID: ', process.env.ONESIGNAL_APP_ID)
+
   return (
     <GluestackUIProvider mode="light">
       <AuthContextProvider>
