@@ -85,7 +85,8 @@ export function Exercise() {
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            title="Parabéns! Exercício registrado no seu histórico."
+            title="Parabéns!"
+            description="Exercício registrado no seu histórico."
             action="success"
             onClose={() => toast.close(id)}
           />

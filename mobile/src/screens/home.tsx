@@ -44,7 +44,7 @@ export function Home() {
     } catch (error) {
       const isAppError = error instanceof AppError
 
-      const title = isAppError
+      const description = isAppError
         ? error.message
         : 'Não foi possível carregar os grupos musculares.'
 
@@ -53,7 +53,8 @@ export function Home() {
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            title={title}
+            title="Ops!"
+            description={description}
             action="error"
             onClose={() => toast.close(id)}
           />
@@ -72,7 +73,7 @@ export function Home() {
     } catch (error) {
       const isAppError = error instanceof AppError
 
-      const title = isAppError
+      const description = isAppError
         ? error.message
         : 'Não foi possível carregar os exercícios.'
 
@@ -81,7 +82,8 @@ export function Home() {
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            title={title}
+            title="Ops!"
+            description={description}
             action="error"
             onClose={() => toast.close(id)}
           />

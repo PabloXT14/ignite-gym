@@ -5,6 +5,7 @@ import { Toast, ToastDescription, ToastTitle } from '@/components/ui/toast'
 import { VStack } from '@/components/ui/vstack'
 import { Pressable } from '@/components/ui/pressable'
 import { Icon } from '@/components/ui/icon'
+import { HStack } from '@/components/ui/hstack'
 
 type ToastMessageProps = {
   id: string
@@ -30,15 +31,22 @@ export function ToastMessage({
         action === 'success' ? 'bg-green-500' : 'bg-red-500'
       )}
     >
-      <VStack className="w-full">
-        <Pressable className="self-end" onPress={onClose}>
-          <Icon as={X} className="text-gray-50" size="md" />
-        </Pressable>
+      <VStack className="w-full gap-2">
+        <HStack className="w-full items-center justify-between">
+          <ToastTitle
+            className="text-white text-base font-bold flex-1"
+            numberOfLines={1}
+          >
+            {title}
+          </ToastTitle>
 
-        <ToastTitle className="text-white font-bold">{title}</ToastTitle>
+          <Pressable onPress={onClose}>
+            <Icon as={X} className="text-gray-50" size="md" />
+          </Pressable>
+        </HStack>
 
         {description && (
-          <ToastDescription className="text-white font-regular">
+          <ToastDescription className="text-white text-xs font-regular">
             {description}
           </ToastDescription>
         )}
