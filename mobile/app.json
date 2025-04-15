@@ -14,7 +14,16 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pabloxt14.ignitegym"
+      "bundleIdentifier": "com.pabloxt14.ignitegym",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"] // ✅ Required for push notifications
+      },
+      "entitlements": {
+        "aps-environment": "development", // ✅ Required for push notification, change to "production" for Testflight and App Store builds
+        "com.apple.security.application-groups": [
+          "group.${ios.bundleIdentifier}.onesignal" // ✅ Required for confirmed delivery
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,6 +44,12 @@
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
         }
       ]
     ]
