@@ -33,7 +33,7 @@ export function History() {
     } catch (error) {
       const isAppError = error instanceof AppError
 
-      const title = isAppError
+      const description = isAppError
         ? error.message
         : 'Não foi possível carregar o histórico de exercícios.'
 
@@ -42,7 +42,8 @@ export function History() {
         render: ({ id }) => (
           <ToastMessage
             id={id}
-            title={title}
+            title="Erro ao carregar histórico"
+            description={description}
             action="error"
             onClose={() => toast.close(id)}
           />

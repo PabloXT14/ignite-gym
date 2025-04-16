@@ -24,6 +24,8 @@ import { AppError } from '../utils/app-error'
 import { getExerciseById } from '../https/get-exercise-by-id'
 import { registerExerciseHistory } from '../https/register-exercise-history'
 
+import { useExercise } from '../hooks/use-exercise'
+
 import BodySvg from '@src/assets/body.svg'
 import SeriesSvg from '@src/assets/series.svg'
 import RepetitionsSvg from '@src/assets/repetitions.svg'
@@ -33,6 +35,10 @@ type RouteParamsProps = {
 }
 
 export function Exercise() {
+  const incrementWeeklyExercises = useExercise(
+    state => state.incrementWeeklyExercises
+  )
+
   const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -79,6 +85,8 @@ export function Exercise() {
       setSendingRegisterHistory(true)
 
       await registerExerciseHistory({ exerciseId })
+
+      incrementWeeklyExercises()
 
       toast.show({
         placement: 'top',
