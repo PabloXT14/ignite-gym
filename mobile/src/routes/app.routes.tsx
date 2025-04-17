@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import { Platform } from 'react-native'
 import {
   createBottomTabNavigator,
   type BottomTabNavigationProp,
 } from '@react-navigation/bottom-tabs'
+import * as NavigationBar from 'expo-navigation-bar'
 
 import { Home } from '../screens/home'
 import { Profile } from '../screens/profile'
@@ -29,6 +31,10 @@ const { Navigator, Screen } = createBottomTabNavigator<AppRoutesProps>()
 
 export function AppRoutes() {
   const iconSize = 24
+
+  useEffect(() => {
+    NavigationBar.setBackgroundColorAsync(colors.gray[600])
+  }, [])
 
   return (
     <Navigator
