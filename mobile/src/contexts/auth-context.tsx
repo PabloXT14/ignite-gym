@@ -16,6 +16,10 @@ import {
   saveAuthTokenStorage,
 } from '../storage/auth-token-storage'
 
+import { updateIsLoggedInTag } from '../notifications/notification-tags'
+import { useExercise } from '../hooks/use-exercise'
+import { countExercisesThisWeek } from '../https/count-exercises-this-week'
+
 export type AuthContextData = {
   user: UserDTO
   signIn: (email: string, password: string) => Promise<void>
@@ -32,8 +36,9 @@ type AuthContextProviderProps = {
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserDTO>({} as UserDTO)
-
   const [isLoadingUserStorageData, setIsLoadingUserStorageData] = useState(true)
+
+  const setWeeklyExercises = useExercise(state => state.setWeeklyExercises)
 
   async function updateUserAndToken(userData: UserDTO, token: string) {
     api.defaults.headers.common.Authorization = `Bearer ${token}`
@@ -68,6 +73,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       if (user && token && refresh_token) {
         await storageUserAndToken(user, token, refresh_token)
         await updateUserAndToken(user, token)
+
+        updateIsLoggedInTag(true)
       }
     } catch (error) {
       throw error
@@ -82,6 +89,8 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       await removeUserStorage()
       await removeAuthTokenStorage()
+
+      updateIsLoggedInTag(false)
     } catch (error) {
       throw error
     } finally {
@@ -107,12 +116,21 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
       if (userLogged && token) {
         await updateUserAndToken(userLogged, token)
+        updateIsLoggedInTag(true)
+      } else {
+        updateIsLoggedInTag(false)
       }
     } catch (error) {
       throw error
     } finally {
       setIsLoadingUserStorageData(false)
     }
+  }
+
+  async function getExercisesThisWeek() {
+    const { count } = await countExercisesThisWeek()
+
+    setWeeklyExercises(count)
   }
 
   useEffect(() => {
@@ -126,6 +144,12 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       subscribe()
     }
   }, [])
+
+  useEffect(() => {
+    if (user.id) {
+      getExercisesThisWeek()
+    }
+  }, [user.id])
 
   return (
     <AuthContext.Provider
