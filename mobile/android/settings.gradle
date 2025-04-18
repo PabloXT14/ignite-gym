@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'ignite-gym'
+rootProject.name = 'Ignite Gym'
 
 dependencyResolutionManagement {
   versionCatalogs {

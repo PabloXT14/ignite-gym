@@ -26,6 +26,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="com.pabloxt14.ignitegym"/>
+        <data android:scheme="ignite-gym"/>
       </intent-filter>
     </activity>
   </application>
