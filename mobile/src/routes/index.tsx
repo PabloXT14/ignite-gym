@@ -1,4 +1,8 @@
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
+import {
+  NavigationContainer,
+  DefaultTheme,
+  type LinkingOptions,
+} from '@react-navigation/native'
 
 import { Box } from '@/components/ui/box'
 import { AuthRoutes } from './auth.routes'
@@ -7,6 +11,25 @@ import { Loading } from '../components/loading'
 import { useAuth } from '../hooks/use-auth'
 
 import { colors } from '../styles/colors'
+
+const linking: LinkingOptions<ReactNavigation.RootParamList> = {
+  prefixes: ['ignite-gym://', 'com.pabloxt14.ignitegym://'],
+  config: {
+    screens: {
+      signIn: 'signIn',
+      signUp: 'signUp',
+      home: 'home',
+      profile: 'profile',
+      history: 'history',
+      exercise: {
+        path: '/exercise/:exerciseId',
+        parse: {
+          exerciseId: (exerciseId: string) => exerciseId,
+        },
+      },
+    },
+  },
+}
 
 export function Routes() {
   const { user, isLoadingUserStorageData } = useAuth()
@@ -20,7 +43,7 @@ export function Routes() {
 
   return (
     <Box className="flex-1 bg-gray-700">
-      <NavigationContainer theme={theme}>
+      <NavigationContainer theme={theme} linking={linking}>
         {user.id ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
