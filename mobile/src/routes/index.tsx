@@ -27,6 +27,9 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
           exerciseId: (exerciseId: string) => exerciseId,
         },
       },
+      notFound: {
+        path: '*',
+      },
     },
   },
 }

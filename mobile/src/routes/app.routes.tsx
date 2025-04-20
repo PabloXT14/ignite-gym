@@ -10,6 +10,7 @@ import { Home } from '../screens/home'
 import { Profile } from '../screens/profile'
 import { History } from '../screens/history'
 import { Exercise } from '../screens/exercise'
+import { NotFound } from '../screens/not-found'
 
 import HomeSvg from '@src/assets/home.svg'
 import HistorySvg from '@src/assets/history.svg'
@@ -23,6 +24,7 @@ type AppRoutesProps = {
   exercise: {
     exerciseId: string
   }
+  notFound: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutesProps>
@@ -86,6 +88,15 @@ export function AppRoutes() {
         name="exercise"
         component={Exercise}
         options={{ tabBarItemStyle: { display: 'none' } }}
+      />
+
+      <Screen
+        name="notFound"
+        component={NotFound}
+        options={{
+          tabBarStyle: { display: 'none' },
+          tabBarItemStyle: { display: 'none' },
+        }}
       />
     </Navigator>
   )
